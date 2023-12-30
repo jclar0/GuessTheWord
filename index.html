@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Guess the Word!</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                text-align: center;
+                margin: 20px;
+                background-color: #121212;
+                color: #ffffff;
+            }
+
+            button {
+                border: 2px solid #1F1B24;
+                padding: 14px 14px;
+                cursor: pointer;
+                border-radius: 5px;
+                background-color: #1F1B24;
+                color: #ffffff;
+            }
+
+            #userInput {
+                border: 0.1px solid #1F1B24;
+                padding: 14px 14px;
+                cursor: pointer;
+                border-radius: 5px;
+                background-color: #1F1B24;
+                color: #ffffff;
+            }
+
+            #debugContainer {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                text-align: left;
+            }
+
+            #debugOutput {
+                font-style: italic;
+                margin-top: 5px;
+            }
+
+            #reminderContainer {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            #reminderContainer ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+            #reminderContainer li {
+                margin-bottom: 5px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="debugContainer">
+            <label for="debugCheckbox">Debug:</label>
+            <input type="checkbox" id="debugCheckbox" onchange="toggleDebug()">
+            <p id="debugOutput"></p>
+        </div>
+
+        <h1>Guess the Word!</h1>
+
+        <p>Enter a <b>five letter word</b> and I will tell you if it is before or after my word!</p>
+        <input type="text" id="userInput" maxlength="5">
+        <button onclick="checkGuess()">Submit Guess</button>
+        <p id="result"></p>
+
+        <div id="reminderContainer">
+            <p><b>Incorrect words</b></p>
+            <ul id="incorrectWordsList"></ul>
+        </div>
+
+        <script>
+            const wordsBefore = [];
+            const wordsAfter = [];
+
+            async function getWords() {
+                try {
+                    const response = await fetch("words.txt");
+                    const text = await response.text();
+
+                    return text.split("\n").filter(word => word.length === 5);
+                } catch (error) {
+                    console.error("Error getting words: ", error);
+                    return [];
+                }
+            }
+
+            async function initaliseGame() {
+                const words = await getWords();
+
+                if (words.length > 0) {
+                    const chosenWord = words[Math.floor(Math.random() * words.length)];
+
+                    // set it as a global variable
+                    window.chosenWord = chosenWord;
+                } else {
+                    console.error("No valid words found.");
+                }
+            }
+
+            function toggleDebug() {
+                const debugCheckbox = document.getElementById("debugCheckbox");
+                const debugOutput = document.getElementById("debugOutput");
+
+                if (debugCheckbox.checked) {
+                    debugOutput.textContent = `Chosen Word: ${window.chosenWord}`;
+                } else {
+                    debugOutput.textContent = ``;
+                }
+            }
+
+            function checkGuess() {
+                const userInput = document.getElementById("userInput").value.toLowerCase();
+
+                if (userInput.length === 5) {
+                    if (userInput < window.chosenWord) {
+                        wordsBefore.push(userInput);
+                        updateReminderList("incorrectWordsList", wordsBefore, "before");
+
+                        displayResult("Your word is alphabetically before the chosen word.");
+                    } else if (userInput > window.chosenWord) {
+                        wordsAfter.push(userInput);
+                        updateReminderList("incorrectWordsList", wordsAfter, "after")
+
+                        displayResult("Your word is alphabetically after the chosen word.");
+                    } else {
+                        displayResult("You guessed the correct word!");
+                    }
+                } else {
+                    displayResult("Not a five letter word.");
+                }
+            }
+
+            function updateReminderList(listId, words, position) {
+                const listContainer = document.getElementById(listId);
+                const listItem = document.createElement('li');
+
+                listItem.style.fontStyle = "italic";
+                listItem.textContent = `${words[words.length - 1]} (${position})`;
+
+                listContainer.appendChild(listItem);
+            }
+
+            function displayResult(message) {
+                document.getElementById("result").textContent = message;
+            }
+
+            // initalise game when page loads
+            window.onload = initaliseGame;
+        </script>
+    </body>
+</html>

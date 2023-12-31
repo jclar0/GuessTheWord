@@ -5,7 +5,7 @@ let guesses = 0;
 
 async function getWords() {
     try {
-        const response = await fetch("words.txt");
+        const response = await fetch("wordgame/words.txt");
         const text = await response.text();
 
         // relic of when i used a big massive text file,

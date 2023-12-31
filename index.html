@@ -58,14 +58,6 @@
     </head>
 
     <body>
-        <!--
-        <div id="debugContainer">
-            <label for="debugCheckbox">Debug:</label>
-            <input type="checkbox" id="debugCheckbox" onchange="toggleDebug()">
-            <p id="debugOutput"></p>
-        </div>
-        -->
-
         <h1>Guess the Word!</h1>
 
         <p>Enter a <b>five letter word</b> and I will tell you if it is before or after my word!</p>
@@ -107,17 +99,6 @@
                 }
             }
 
-            function toggleDebug() {
-                const debugCheckbox = document.getElementById("debugCheckbox");
-                const debugOutput = document.getElementById("debugOutput");
-
-                if (debugCheckbox.checked) {
-                    debugOutput.textContent = `Chosen Word: ${window.chosenWord}`;
-                } else {
-                    debugOutput.textContent = ``;
-                }
-            }
-
             function checkGuess() {
                 const userInput = document.getElementById("userInput").value.toLowerCase();
 
@@ -153,7 +134,7 @@
             function displayResult(message) {
                 document.getElementById("result").textContent = message;
             }
-
+            
             // initalise game when page loads
             window.onload = initaliseGame;
         </script>

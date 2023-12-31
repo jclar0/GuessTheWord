@@ -51,6 +51,10 @@ function checkGuess() {
     } else {
         displayResult("Not a five letter word! ❌");
     }
+
+    if ((wordsBefore.length > 0 || wordsAfter.length > 0)) {
+        document.getElementById("reminderContainer").style.display = "block";
+    }
 }
 
 function updateReminderList(listId, words, position) {

@@ -1,6 +1,8 @@
 const wordsBefore = [];
 const wordsAfter = [];
 
+let guesses = 0;
+
 async function getWords() {
     try {
         const response = await fetch("words.txt");
@@ -55,6 +57,12 @@ function checkGuess() {
     if ((wordsBefore.length > 0 || wordsAfter.length > 0)) {
         document.getElementById("reminderContainer").style.display = "block";
     }
+
+    guesses++;
+
+    if (guesses > 4) {
+        displayHint();
+    }
 }
 
 function updateReminderList(listId, words, position) {
@@ -65,6 +73,14 @@ function updateReminderList(listId, words, position) {
     listItem.textContent = `${words[words.length - 1]} (${position})`;
 
     listContainer.appendChild(listItem);
+}
+
+function displayHint() {
+    const hintContainer = document.getElementById("hintContainer");
+    const hintText = document.getElementById("hintText");
+
+    hintContainer.style.display = "block";
+    hintText.innerHTML = `<em>Hint!</em> The word is ${chosenWord.charAt(0)} ... ${chosenWord.charAt(4)}`;
 }
 
 function displayResult(result) {

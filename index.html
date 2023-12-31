@@ -107,20 +107,20 @@
                         wordsBefore.push(userInput);
                         updateReminderList("incorrectWordsList", wordsBefore, "before");
 
-                        displayResult("Your word is alphabetically before the chosen word.");
+                        displayResult("Your word is alphabetically before the chosen word. 🔼");
                     } else if (userInput > window.chosenWord) {
                         wordsAfter.push(userInput);
                         updateReminderList("incorrectWordsList", wordsAfter, "after")
 
-                        displayResult("Your word is alphabetically after the chosen word.");
+                        displayResult("Your word is alphabetically after the chosen word. 🔽");
                     } else {
-                        displayResult("You guessed the correct word!");
+                        displayResult("You guessed the correct word! ✅");
                     }
                 } else if (userInput === "lexi") {
                     // because i love her, duh
                     displayResult("I love you! 💗");
                 } else {
-                    displayResult("Not a five letter word.");
+                    displayResult("Not a five letter word. ❌");
                 }
             }
 
